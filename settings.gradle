@@ -1,2 +1,3 @@
 rootProject.name = "Jetpack Compose Example"
 include ':app'
+include ':pokemon-client'

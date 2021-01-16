@@ -1,58 +1,63 @@
 package com.adrorodri.composeexample
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.setContent
+import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.Menu
-import android.view.MenuItem
-import com.adrorodri.composeexample.databinding.ActivityMainBinding
+import com.adrorodri.composeexample.ui.components.AboutText
+import com.adrorodri.composeexample.ui.components.Toolbar
+import com.adrorodri.composeexample.ui.theme.PokemonBaseTheme
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityMainBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        setSupportActionBar(binding.toolbar)
-
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+        setContent {
+            SplashScreen()
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
+    @Preview(showBackground = true)
+    @Composable
+    fun SplashScreen() {
+        PokemonBaseTheme {
+            val navController = rememberNavController()
+            val scaffoldState = rememberScaffoldState()
+            Scaffold(
+                backgroundColor = MaterialTheme.colors.background,
+                topBar = {
+                    Toolbar(
+                        title = { Text(text = "Welcome!") },
+                        onNavigationButtonClick = { scaffoldState.drawerState.open() }
+                    )
+                },
+                bodyContent = {
+                    Column(modifier = Modifier.fillMaxHeight()) {
+                        Image(
+                            modifier = Modifier.weight(1f),
+                            bitmap = imageResource(id = R.drawable.pokemon_logo),
+                            contentScale = ContentScale.Inside
+                        )
+                        TextButton(
+                            modifier = Modifier.wrapContentSize(),
+                            onClick = {
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
+                            }) {
+                            Text(text = "TEST")
+                        }
+                    }
+                },
+                bottomBar = { AboutText(text = "Example Jetpack Compose App") }
+            )
         }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        return navController.navigateUp(appBarConfiguration)
-                || super.onSupportNavigateUp()
     }
 }
