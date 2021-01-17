@@ -13,6 +13,7 @@ fun Toolbar(title: @Composable () -> Unit, onNavigationButtonClick: () -> Unit) 
     TopAppBar(
         title = title,
         backgroundColor = MaterialTheme.colors.primary,
+        contentColor = MaterialTheme.colors.onPrimary,
         navigationIcon = {
             IconButton(
                 onClick = onNavigationButtonClick
