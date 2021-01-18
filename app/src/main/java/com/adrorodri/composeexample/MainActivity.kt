@@ -15,10 +15,7 @@ import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.viewModel
 import androidx.navigation.compose.*
-import com.adrorodri.composeexample.ui.AppScreen
-import com.adrorodri.composeexample.ui.EditProfileScreen
-import com.adrorodri.composeexample.ui.SplashScreen
-import com.adrorodri.composeexample.ui.UserHeader
+import com.adrorodri.composeexample.ui.*
 import com.adrorodri.composeexample.ui.components.Toolbar
 import com.adrorodri.composeexample.ui.theme.PokemonBaseTheme
 import com.adrorodri.composeexample.ui.theme.dim
@@ -44,27 +41,34 @@ class MainActivity : AppCompatActivity() {
         val isUserLoggedIn = userViewModel.userLoggedIn.observeAsState()
         val userName = userViewModel.userName.observeAsState()
 
+        val home = AppScreen(
+            "HomeScreen",
+            "Home"
+        ) {
+            HomeScreen()
+        }
+
         val splashScreen = AppScreen(
             "splashScreen",
             "Splash Screen"
         ) {
-            SplashScreen()
-        }
-
-        val editProfileScreen = AppScreen(
-            "editProfileScreen",
-            "EditProfileScreen"
-        ) {
-            EditProfileScreen(onSave = {
-                userViewModel.userName.value = "Adrian"
-                navController.popBackStack(
-                    navController.graph.startDestination,
-                    false
-                )
+            SplashScreen(onStart = {
+                navController.popBackStack()
+                navController.navigate(home.route)
             })
         }
 
-        val screens = listOf(splashScreen, editProfileScreen)
+        val editProfile = AppScreen(
+            "editProfileScreen",
+            "Edit Profile"
+        ) {
+            EditProfileScreen(onSave = {
+                userViewModel.userName.value = "Adrian"
+                navController.popBackStack()
+            })
+        }
+
+        val screens = listOf(splashScreen, home, editProfile)
         val screenMap = screens.associateBy { it.route }
 
         PokemonBaseTheme {
@@ -86,7 +90,7 @@ class MainActivity : AppCompatActivity() {
                         },
                         onEditProfileClick = {
                             scaffoldState.drawerState.close()
-                            navController.navigate(editProfileScreen.route)
+                            navController.navigate(editProfile.route)
                         }
                     )
                     screens.forEach { screen ->

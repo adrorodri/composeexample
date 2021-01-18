@@ -25,7 +25,7 @@ import com.adrorodri.composeexample.ui.theme.buttons
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun SplashScreen() {
+fun SplashScreen(onStart : (() -> Unit)? = null) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxHeight()
@@ -45,7 +45,7 @@ fun SplashScreen() {
                 .padding(10.dp)
                 .background(MaterialTheme.colors.primary),
             onClick = {
-
+                onStart?.invoke()
             }) {
             Text(text = "Start")
         }
