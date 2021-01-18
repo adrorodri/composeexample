@@ -9,16 +9,17 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 
 @Composable
-fun Toolbar(title: @Composable () -> Unit, onNavigationButtonClick: () -> Unit) {
+fun Toolbar(title: @Composable () -> Unit, onNavigationButtonClick: (() -> Unit)? = null) {
     TopAppBar(
         title = title,
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = MaterialTheme.colors.onPrimary,
         navigationIcon = {
-            IconButton(
-                onClick = onNavigationButtonClick
-            ) {
-                Icon(Icons.Filled.Menu)
-            }
+            if (onNavigationButtonClick != null)
+                IconButton(
+                    onClick = onNavigationButtonClick
+                ) {
+                    Icon(Icons.Filled.Menu)
+                }
         })
 }

@@ -2,37 +2,48 @@ package com.adrorodri.composeexample.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavBackStackEntry
 import com.adrorodri.composeexample.R
-import com.adrorodri.composeexample.ui.components.AboutText
 import com.adrorodri.composeexample.ui.theme.buttons
 
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun ListScreen(backStackEntry: NavBackStackEntry?) {
+fun UserHeader(
+    userLoggedIn: Boolean? = false,
+    userName: String? = null,
+    onLoginClick: (() -> Unit)? = null,
+    onEditProfileClick: (() -> Unit)? = null
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxHeight()
     ) {
-        Image(
-            modifier = Modifier.weight(1f),
-            bitmap = imageResource(id = R.drawable.pokemon_logo),
-            contentScale = ContentScale.Inside
-        )
+        Card(
+            modifier = Modifier
+                .padding(10.dp)
+                .preferredSize(100.dp),
+            shape = CircleShape,
+            elevation = 10.dp
+        ) {
+            Image(
+                imageResource(id = R.drawable.example_landscape),
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+        if (userName != null) {
+            Text(text = userName)
+        }
         TextButton(
             shape = buttons.medium,
             colors = ButtonDefaults.buttonColors(contentColor = Color.White),
@@ -41,10 +52,12 @@ fun ListScreen(backStackEntry: NavBackStackEntry?) {
                 .padding(10.dp)
                 .background(MaterialTheme.colors.primary),
             onClick = {
-
+                if (!userLoggedIn!!)
+                    onLoginClick?.invoke()
+                else
+                    onEditProfileClick?.invoke()
             }) {
-            Text(text = "Start")
+            Text(text = if (userLoggedIn!!) "Edit Profile" else "Login")
         }
-        AboutText(text = "Example Jetpack Compose App")
     }
 }

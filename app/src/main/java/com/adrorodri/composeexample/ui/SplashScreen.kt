@@ -2,6 +2,7 @@ package com.adrorodri.composeexample.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,20 +17,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavBackStackEntry
 import com.adrorodri.composeexample.R
 import com.adrorodri.composeexample.ui.components.AboutText
 import com.adrorodri.composeexample.ui.theme.buttons
 
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun SplashScreen(backStackEntry: NavBackStackEntry?) {
+fun SplashScreen() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxHeight()
     ) {
         Image(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .clickable(onClick = { }),
             bitmap = imageResource(id = R.drawable.pokemon_logo),
             contentScale = ContentScale.Inside
         )
