@@ -14,16 +14,17 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.adrorodri.composeexample.R
+import com.adrorodri.composeexample.data.user.model.User
 import com.adrorodri.composeexample.ui.theme.buttons
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun UserHeader(
-    userLoggedIn: Boolean? = false,
-    userName: String? = null,
+    user: User? = null,
     onLoginClick: (() -> Unit)? = null,
     onEditProfileClick: (() -> Unit)? = null
 ) {
+    val userLoggedIn = user != null
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -40,8 +41,8 @@ fun UserHeader(
                 modifier = Modifier.fillMaxSize()
             )
         }
-        if (userName != null) {
-            Text(text = userName)
+        if (userLoggedIn) {
+            Text(text = "${user?.firstName} ${user?.lastName}")
         }
         TextButton(
             shape = buttons.medium,
@@ -51,12 +52,12 @@ fun UserHeader(
                 .padding(10.dp)
                 .background(MaterialTheme.colors.primary),
             onClick = {
-                if (!userLoggedIn!!)
+                if (!userLoggedIn)
                     onLoginClick?.invoke()
                 else
                     onEditProfileClick?.invoke()
             }) {
-            Text(text = if (userLoggedIn!!) "Edit Profile" else "Login")
+            Text(text = if (userLoggedIn) "Edit Profile" else "Login")
         }
     }
 }

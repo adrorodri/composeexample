@@ -11,7 +11,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,7 +25,8 @@ import com.adrorodri.composeexample.ui.theme.buttons
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun SplashScreen(onStart : (() -> Unit)? = null) {
+fun SplashScreen(onStart: (() -> Unit)? = null) {
+    var contentScale by remember { mutableStateOf(ContentScale.Inside) }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxHeight()
@@ -33,9 +34,15 @@ fun SplashScreen(onStart : (() -> Unit)? = null) {
         Image(
             modifier = Modifier
                 .weight(1f)
-                .clickable(onClick = { }),
+                .clickable(onClick = {
+                    contentScale =
+                        if (contentScale == ContentScale.Inside)
+                            ContentScale.Crop
+                        else
+                            ContentScale.Inside
+                }),
             bitmap = imageResource(id = R.drawable.pokemon_logo),
-            contentScale = ContentScale.Inside
+            contentScale = contentScale
         )
         TextButton(
             shape = buttons.medium,

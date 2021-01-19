@@ -4,7 +4,13 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,8 +44,7 @@ class MainActivity : AppCompatActivity() {
         val currentRoute = navBackStackEntry?.arguments?.getString(KEY_ROUTE)
 
         val userViewModel: UserViewModel = viewModel()
-        val isUserLoggedIn = userViewModel.userLoggedIn.observeAsState()
-        val userName = userViewModel.userName.observeAsState()
+        val user = userViewModel.user.observeAsState()
 
         val home = AppScreen(
             "HomeScreen",
@@ -63,8 +68,9 @@ class MainActivity : AppCompatActivity() {
             "Edit Profile"
         ) {
             EditProfileScreen(onSave = {
-                userViewModel.userName.value = "Adrian"
-                navController.popBackStack()
+                userViewModel.editUser(it) {
+                    navController.popBackStack()
+                }
             })
         }
 
@@ -75,6 +81,12 @@ class MainActivity : AppCompatActivity() {
             Scaffold(
                 scaffoldState = scaffoldState,
                 backgroundColor = MaterialTheme.colors.background,
+                drawerShape = RoundedCornerShape(
+                    ZeroCornerSize,
+                    CornerSize(40.dp),
+                    CornerSize(40.dp),
+                    ZeroCornerSize
+                ),
                 drawerContent = {
                     Text(
                         text = "Pokemon API",
@@ -82,11 +94,10 @@ class MainActivity : AppCompatActivity() {
                         modifier = Modifier.padding(16.dp)
                     )
                     UserHeader(
-                        userLoggedIn = isUserLoggedIn.value,
-                        userName = userName.value,
+                        user = user.value,
                         onLoginClick = {
                             scaffoldState.drawerState.close()
-                            userViewModel.userLoggedIn.value = true
+                            userViewModel.loginUser("Example Username")
                         },
                         onEditProfileClick = {
                             scaffoldState.drawerState.close()
